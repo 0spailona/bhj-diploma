@@ -1,3 +1,5 @@
+process.env.NODE_ENV= "development"
+
 require('dotenv').config();
 const { PORT, PUBLIC_PATH, INDEX_FILE } = process.env;
 const path = require('path');
