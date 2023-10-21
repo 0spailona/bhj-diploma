@@ -13,7 +13,7 @@ class TransactionsWidget {
      * */
     constructor(element) {
         if (!element) {
-            console.log('error');
+            errors(null, 'The element is undefined');
         } else {
             this.element = element;
             this.registerEvents();
@@ -32,8 +32,9 @@ class TransactionsWidget {
             e.preventDefault();
             App.getModal(modalName).open();
         }
-        document.querySelector('.create-income-button').addEventListener('click', e => showModal(e,'newIncome'));
-        document.querySelector('.create-expense-button').addEventListener('click', e => showModal(e,'newExpense'));
+
+        document.querySelector('.create-income-button').addEventListener('click', e => showModal(e, 'newIncome'));
+        document.querySelector('.create-expense-button').addEventListener('click', e => showModal(e, 'newExpense'));
 
     }
 }

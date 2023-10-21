@@ -15,7 +15,7 @@ class AccountsWidget {
      * */
     constructor(element) {
         if (!element) {
-            alert('error');
+            errors(null, "The account is undefined");
         } else {
             this.element = element;
             this.registerEvents();
@@ -39,8 +39,7 @@ class AccountsWidget {
             if (e.target.classList.contains('create-account')) {
                 return;
             }
-            //console.log('registerEvents',e.target.className);
-            this.onSelectAccount(e.target.closest('.account'))
+            this.onSelectAccount(e.target.closest('.account'));
         });
     }
 
@@ -61,12 +60,14 @@ class AccountsWidget {
 
         function callback(err, serverData) {
             if (err) {
-                console.error(err);
+                errors(err, 'Error');
                 return;
             }
             if (serverData.success) {
                 this.clear();
                 this.renderItem(serverData.data);
+            } else {
+                errors(null, "The account's list is undefined");
             }
         }
 
@@ -99,6 +100,7 @@ class AccountsWidget {
             this.element.querySelector('.active').classList.remove('active');
         }
         element.classList.add('active');
+        this.aciveAccountId = element.dataset.id;
         App.showPage('transactions', {account_id: element.dataset.id});
     }
 
@@ -108,10 +110,16 @@ class AccountsWidget {
      * item - объект с данными о счёте
      * */
     getAccountHTML(item) {
+        if (this.aciveAccountId) {
+
+        }
         const newAccount = document.createElement('li');
-        newAccount.classList.add('account');
+        if (this.aciveAccountId && item.id === this.aciveAccountId) {
+            newAccount.classList.add('account', 'active');
+        } else {
+            newAccount.classList.add('account');
+        }
         newAccount.dataset.id = item['id'];
-        //console.log(this.element);
         this.element.appendChild(newAccount);
         newAccount.insertAdjacentHTML('beforeend', `
         <a href="#">

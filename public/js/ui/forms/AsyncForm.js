@@ -14,7 +14,7 @@ class AsyncForm {
      * */
     constructor(element) {
         if (!element) {
-            console.log('error');
+            errors(null, 'The form is undefined')
         } else {
             this.element = element;
             this.registerEvents();
@@ -40,19 +40,12 @@ class AsyncForm {
      * }
      * */
     getData() {
-        //через formData
         const formData = new FormData(this.element);
         const data = {};
         for (let entry of formData.entries()) {
             data[entry[0]] = entry[1];
         }
-        // через объект
-        /*const data = {};
-        for (let input of this.element.querySelectorAll('input')) {
-            data[input.name] = input.value;
-        }*/
-        //console.log(JSON.stringify(data));
-        //console.log(JSON.stringify(data2));
+
         return data;
     }
 

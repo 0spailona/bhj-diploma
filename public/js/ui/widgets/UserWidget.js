@@ -13,10 +13,9 @@ class UserWidget {
      * */
     constructor(element) {
         if (!element) {
-            console.log('error');
+            errors(null, 'The element is undefined');
         } else {
             this.element = element;
-            //console.log('constructor', this.element);
         }
     }
 
@@ -28,9 +27,7 @@ class UserWidget {
      * авторизованного пользователя
      * */
     update() {
-        //console.log('update', this.element);
         const user = User.current();
-       // console.log('update',user);
         this.element.querySelector('.user-name').textContent = `${user.name}`;
     }
 }

@@ -12,21 +12,21 @@ class LoginForm extends AsyncForm {
     onSubmit(data) {
         function callback(err, serverData) {
             if (err) {
-                console.error(err);
+                errors(err, 'Error');
                 return;
             }
             if (serverData && serverData.success) {
-                console.log('onSubmit', serverData);
+                this.element.reset();
                 App.updateForms();
                 App.setState('user-logged');
 
-                const modalName = 'login';
+                let modalName = this.element.closest('.modal').dataset.modalId;
                 App.getModal(modalName).close();
             } else {
                 alert(`Пользователь c email ${data.email} и паролем ${data.password} не найден`);
             }
         }
 
-        User.login(data, callback);
+        User.login(data, callback.bind(this));
     }
 }

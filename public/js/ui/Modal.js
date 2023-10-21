@@ -13,7 +13,7 @@ class Modal {
      * */
     constructor(element) {
         if (!element) {
-            alert('error');
+            errors(null, 'The element is undefined');
         } else {
             this.element = element;
             this.registerEvents();
@@ -26,7 +26,7 @@ class Modal {
      * (с помощью метода Modal.onClose)
      * */
     registerEvents() {
-        for (let closeBtn of this.element.querySelectorAll('[data-dismiss="modal"]')){
+        for (let closeBtn of this.element.querySelectorAll('[data-dismiss="modal"]')) {
             closeBtn.addEventListener('click', e => {
                 e.preventDefault();
                 this.onClose(e);
@@ -39,7 +39,7 @@ class Modal {
      * Закрывает текущее окно (Modal.close())
      * */
     onClose(e) {
-       this.close();
+        this.close();
     }
 
     /**

@@ -23,19 +23,22 @@ class CreateTransactionForm extends AsyncForm {
 
         function callback(err, serverData) {
             if (err) {
-                console.error(err);
+                errors(err, 'Error')
                 return;
             }
+
             if (serverData.success) {
+
+                for (let option of this.element.querySelectorAll('option')) {
+                    option.remove();
+                }
                 for (let account of serverData.data) {
                     const optionEl = document.createElement('option');
                     optionEl.value = account.id;
                     optionEl.text = account.name;
-                    //console.log('value', optionEl.value, 'text', optionEl.text);
                     this.element.querySelector('.accounts-select').appendChild(optionEl);
                 }
-            } else {
-                console.log('Сначала создайте счёт');
+
             }
         }
 
@@ -49,23 +52,22 @@ class CreateTransactionForm extends AsyncForm {
      * в котором находится форма
      * */
     onSubmit(data) {
-        console.log('onSubmit',data);
-
         function callback(err, serverData) {
 
             if (err) {
-                console.error(err);
+                errors(err, 'Error');
                 return;
             }
             if (serverData.success) {
-
-                //console.log('onSubmit.callback',serverData);
-                const modalName = 'newIncome' || 'newExpense';
-                App.getModal(modalName).close();
+                let modalName = this.element.closest('.modal').dataset.modalId;
+                this.element.reset();
                 App.update();
+                App.getModal(modalName).close();
+            } else if (!serverData.success) {
+                errors(null, "The transaction wasn't created");
             }
         }
 
-        Transaction.create(data, callback);
+        Transaction.create(data, callback.bind(this));
     }
 }

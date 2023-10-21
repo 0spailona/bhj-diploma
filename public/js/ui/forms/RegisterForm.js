@@ -13,7 +13,7 @@ class RegisterForm extends AsyncForm {
 
         function callback(err, serverData) {
             if (err) {
-                console.error(err);
+                errors(err, 'Error');
                 return;
             }
             if (data.password.length < 3) {
@@ -24,11 +24,14 @@ class RegisterForm extends AsyncForm {
                 User.setCurrent(serverData.user);
                 App.setState('user-logged');
 
-                const modalName = 'register';
+                let modalName = this.element.closest('.modal').dataset.modalId;
                 App.getModal(modalName).close();
+            } else {
+                errors(null, "The user wasn't registered");
             }
+
         }
 
-        User.register(data, callback);
+        User.register(data, callback.bind(this));
     }
 }
