@@ -3,46 +3,45 @@
  * на сервер.
  * */
 
-//Если сделать DELETE как общепринято, сервер выдает 500
-const methodsWithoutBody = ['get', '-delete', 'head'];
 
 const createRequest = (options = {}) => {
     const xhr = new XMLHttpRequest();
     let url = options.url;
     let formData = null;
 
-    if (methodsWithoutBody.includes(options.method.toLowerCase())) {
+    const method = options.method;
+    const data = options.data || {};
+
+    if (method === 'GET') {
         url = url + '?';
-        for (let key of Object.keys(options.data)) {
-            const coupleData = `${key}=${options.data[key]}`;
+        for (let key of Object.keys(data)) {
+            const coupleData = `${key}=${data[key]}`;
             url = url + coupleData + '&';
         }
         url = url.slice(0, url.length - 1);
     } else {
         formData = new FormData;
-        for (let item of Object.keys(options.data)) {
-            formData.append(item, options.data[item]);
+        for (let item of Object.keys(data)) {
+            formData.append(item, data[item]);
         }
     }
     xhr.responseType = 'json';
 
-    xhr.addEventListener('loadend', e => {
+    xhr.addEventListener('load', e => {
 
-        if (Math.trunc(e.target.status / 100) === 2) {
-            try {
-                options.callback(null, xhr.response);
-            } catch (e) {
-                errors(e, 'Error during callback');
-            }
-        } else {
-            errors(null, `Error:${e.target.status}`);
+        try {
+            typeof options.callback === 'function' && options.callback(null, xhr.response);
+        } catch (e) {
+            console.log(e, 'Error during callback');
+            typeof options.callback === 'function' && options.callback(`${xhr.status} ${xhr.statusText}`, xhr.response);
         }
     })
     try {
-        xhr.open(options.method, url);
+        xhr.open(method, url, true);
         xhr.send(formData);
     } catch (e) {
-        options.callback(options.err, null);
+        console.log(e);
+        typeof options.callback === 'function' && options.callback(options.err, null);
     }
-
+    return xhr;
 }

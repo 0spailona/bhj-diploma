@@ -12,7 +12,7 @@ class TransactionsPage {
      * */
     constructor(element) {
         if (!element) {
-            errors(null,'The element is undefined');
+            errors(null, 'The element is undefined');
         } else {
             this.element = element;
             this.registerEvents();
@@ -41,8 +41,8 @@ class TransactionsPage {
         });
 
         this.element.addEventListener('click', e => {
-            if (e.target.dataset.id || e.target.closest('button').dataset.id) {
-                this.removeTransaction(e.target.dataset.id);
+            if (e.target.classList.contains('transaction__remove') || e.target.closest('.transaction__remove')) {
+                this.removeTransaction(e.target.dataset.id || e.target.closest('.transaction__remove').dataset.id);
             }
         });
     }
@@ -62,7 +62,7 @@ class TransactionsPage {
             this.clear();
             Account.remove({id: document.querySelector('.active').dataset.id}, (err, serverData) => {
                 if (err) {
-                    errors(err,'Error');
+                    errors(err, 'Error');
                     return;
                 }
                 if (serverData.success) {
@@ -70,7 +70,7 @@ class TransactionsPage {
                     App.updateForms()
 
                 } else if (!serverData.success) {
-                    errors(null,"The account wasn't deleted");
+                    errors(null, "The account wasn't deleted");
                 }
             });
 
@@ -88,7 +88,7 @@ class TransactionsPage {
         if (answer) {
             Transaction.remove({id: id}, (err, serverData) => {
                     if (err) {
-                        errors(err,'Error');
+                        errors(err, 'Error');
                         return;
                     }
                     if (serverData.success) {
@@ -97,7 +97,7 @@ class TransactionsPage {
 
                         //App.update();
                     } else if (!serverData.success) {
-                        errors(null,"Transaction wasn't deleted");
+                        errors(null, "Transaction wasn't deleted");
                     }
                 }
             )
@@ -119,20 +119,20 @@ class TransactionsPage {
 
         Account.get(options.account_id, (err, serverData) => {
             if (err) {
-                errors(err,'Error');
+                errors(err, 'Error');
                 return;
             }
             if (serverData && serverData.success) {
                 this.renderTitle(serverData.data.name);
             } else {
-                errors(null,"The account name is undefined");
+                errors(null, "The account name is undefined");
             }
         });
 
         Transaction.list({account_id: options.account_id}, (err, serverData) => {
 
             if (err) {
-                errors(err,'Error');
+                errors(err, 'Error');
                 return;
             }
             if (serverData && serverData.success) {
@@ -191,7 +191,7 @@ class TransactionsPage {
 
         const newTransaction = document.createElement('div');
         this.element.querySelector('.content').appendChild(newTransaction);
-        newTransaction.insertAdjacentHTML('beforeend', `<div class="transaction transaction_${item.type} row">
+        return newTransaction.insertAdjacentHTML('beforeend', `<div class="transaction transaction_${item.type} row">
      <div class="col-md-7 transaction__details">
        <div class="transaction__icon">
            <span class="fa fa-money fa-2x"></span>

@@ -2,8 +2,9 @@
 
 function errors(err, message) {
     if (err === null) {
-        console.log(message);
+        throw new Error(message);
     } else {
-        console.error(err, message);
+        console.error(err);
+        throw new Error(message);
     }
 }

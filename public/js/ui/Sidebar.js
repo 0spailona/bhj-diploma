@@ -21,14 +21,10 @@ class Sidebar {
         function showAndHideMenu(e) {
             e.preventDefault();
             const bodyEl = document.querySelector('body');
-            if (bodyEl.classList.contains('sidebar-open')) {
-                bodyEl.classList.remove('sidebar-open');
-                bodyEl.classList.add('sidebar-collapse');
-            } else if (bodyEl.classList.contains('sidebar-collapse')) {
-                bodyEl.classList.remove('sidebar-collapse');
-                bodyEl.classList.add('sidebar-open');
+            if (bodyEl.classList.contains('sidebar-collapse')) {
+                bodyEl.classList.toggle('sidebar-collapse');
             } else {
-                bodyEl.classList.add('sidebar-open');
+                bodyEl.classList.toggle('sidebar-open');
             }
         }
 

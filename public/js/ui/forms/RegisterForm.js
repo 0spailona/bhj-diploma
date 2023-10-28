@@ -10,8 +10,7 @@ class RegisterForm extends AsyncForm {
      * и закрывает окно, в котором находится форма
      * */
     onSubmit(data) {
-
-        function callback(err, serverData) {
+        User.register(data, (err, serverData) => {
             if (err) {
                 errors(err, 'Error');
                 return;
@@ -29,9 +28,6 @@ class RegisterForm extends AsyncForm {
             } else {
                 errors(null, "The user wasn't registered");
             }
-
-        }
-
-        User.register(data, callback.bind(this));
+        });
     }
 }

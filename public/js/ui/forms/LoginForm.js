@@ -10,7 +10,7 @@ class LoginForm extends AsyncForm {
      * закрывает окно, в котором находится форма
      * */
     onSubmit(data) {
-        function callback(err, serverData) {
+        User.login(data, (err, serverData) => {
             if (err) {
                 errors(err, 'Error');
                 return;
@@ -23,10 +23,9 @@ class LoginForm extends AsyncForm {
                 let modalName = this.element.closest('.modal').dataset.modalId;
                 App.getModal(modalName).close();
             } else {
+
                 alert(`Пользователь c email ${data.email} и паролем ${data.password} не найден`);
             }
-        }
-
-        User.login(data, callback.bind(this));
+        });
     }
 }

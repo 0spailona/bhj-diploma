@@ -41,10 +41,11 @@ describe("Класс Entity", function() {
       expect(xhr).to.be.an.instanceof(XMLHttpRequest);
     });
 
-    it('Создаёт POST-запрос', () => {
+    it('Создаёт PUT-запрос', () => {
       const xhr = Entity.create();
 
-      expect(xhr.requestMethod).to.be.equals( 'POST' );
+      // due to task description in api.md
+      expect(xhr.requestMethod).to.be.equals( 'PUT' );
     });
 
     it('Обращается по адресу, определённому в свойстве URL', () => {
@@ -65,7 +66,7 @@ describe("Класс Entity", function() {
     it('Создаёт DELETE-запрос', () => {
       const xhr = Entity.remove();
 
-      expect(xhr.requestMethod).to.be.equals( 'POST' );
+      expect(xhr.requestMethod).to.be.equals( 'DELETE' );
     });
 
     it('Обращается по адресу, определённому в свойстве URL', () => {

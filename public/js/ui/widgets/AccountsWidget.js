@@ -57,8 +57,7 @@ class AccountsWidget {
         if (!User.current()) {
             return;
         }
-
-        function callback(err, serverData) {
+        Account.list({}, (err, serverData) => {
             if (err) {
                 errors(err, 'Error');
                 return;
@@ -69,11 +68,7 @@ class AccountsWidget {
             } else {
                 errors(null, "The account's list is undefined");
             }
-        }
-
-        Account.list({}, callback.bind(this));
-
-
+        });
     }
 
     /**
@@ -121,7 +116,7 @@ class AccountsWidget {
         }
         newAccount.dataset.id = item['id'];
         this.element.appendChild(newAccount);
-        newAccount.insertAdjacentHTML('beforeend', `
+        return newAccount.insertAdjacentHTML('beforeend', `
         <a href="#">
         <span>${item['name']}</span> /
         <span>${item['sum']} ₽</span>

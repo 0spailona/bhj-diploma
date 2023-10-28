@@ -20,29 +20,18 @@ class CreateTransactionForm extends AsyncForm {
         if (!User.current()) {
             return;
         }
-
-        function callback(err, serverData) {
+        Account.list(User.current(), (err, serverData) => {
             if (err) {
                 errors(err, 'Error')
                 return;
             }
 
             if (serverData.success) {
-
-                for (let option of this.element.querySelectorAll('option')) {
-                    option.remove();
-                }
-                for (let account of serverData.data) {
-                    const optionEl = document.createElement('option');
-                    optionEl.value = account.id;
-                    optionEl.text = account.name;
-                    this.element.querySelector('.accounts-select').appendChild(optionEl);
-                }
-
+                this.element.querySelector('.accounts-select').innerHTML = serverData.data.reduce((sumHTML, account) =>
+                        sumHTML + `<option value=${account.id}>${account.name}</option>`
+                    , '');
             }
-        }
-
-        Account.list(User.current(), callback.bind(this));
+        });
     }
 
     /**
@@ -52,8 +41,7 @@ class CreateTransactionForm extends AsyncForm {
      * в котором находится форма
      * */
     onSubmit(data) {
-        function callback(err, serverData) {
-
+        Transaction.create(data, (err, serverData) => {
             if (err) {
                 errors(err, 'Error');
                 return;
@@ -66,8 +54,6 @@ class CreateTransactionForm extends AsyncForm {
             } else if (!serverData.success) {
                 errors(null, "The transaction wasn't created");
             }
-        }
-
-        Transaction.create(data, callback.bind(this));
+        });
     }
 }
